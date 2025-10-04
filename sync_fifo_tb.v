@@ -30,7 +30,8 @@ module sync_fifo_tb;
         wire full, overflow, empty, underflow;
         integer i,j,k,l,wr_delay, rd_delay;
         reg [20*8 - 1 : 0] test_data;
-        synchronus_fifo # (.WIDTH(WIDTH), .FIFO_SIZE(FIFO_SIZE), .PTR(PTR)) dut(clock, reset, wr_en_rd_en, wdata,rdata,full,overflow, empty,underflow);
+        synchronus_fifo # (.WIDTH(WIDTH), .FIFO_SIZE(FIFO_SIZE), .PTR(PTR)) dut(clk, reset, wr_en,rd_en, wdata,rdata,full,overflow, empty,underflow);
+        initial clk = 0;
         always #5 clk = ~clk;
         initial begin
             $value$plusargs("test_data = %0s", test_data);
@@ -57,7 +58,7 @@ module sync_fifo_tb;
                                 write(FIFO_SIZE);
                                 read(FIFO_SIZE+1);
                                end  
-                     "concurrent" : begin
+                     "CONCURRENT" : begin
                                         fork
                                             begin
                                                 for (k = 0; k <FIFO_SIZE; k = k+1) begin

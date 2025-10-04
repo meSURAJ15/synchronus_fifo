@@ -4,7 +4,7 @@
 // Engineer: 
 // 
 // Create Date: 16.09.2025 14:31:15
-// Design Name: 
+// Design Name: seenu
 // Module Name: synchronus_fifo
 // Project Name: 
 // Target Devices: 
@@ -40,28 +40,28 @@ module synchronus_fifo(clk,reset, wr_en,rd_en,wdata,rdata ,full, overflow, empty
     always @(posedge clk) begin
     
         if (reset == 1'b1) begin
-            rdata = 1'b0;
-            full = 1'b0;
-            overflow = 1'b0;
-            empty = 1'b1;
-            underflow = 1'b0;
-            rd_p  = 1'b0;
-            wr_p = 1'b0;
-            wr_toggle = 1'b0;
-            rd_toggle = 1'b0;
-            for (i = 0 ; i <FIFO_SIZE ; i = i+1) fifo[i] = 1'b0;
+            rdata <= 1'b0;
+            full <= 1'b0;
+            overflow <= 1'b0;
+            empty <= 1'b1;
+            underflow <= 1'b0;
+            rd_p  <= 1'b0;
+            wr_p <= 1'b0;
+            wr_toggle <= 1'b0;
+            rd_toggle <= 1'b0;
+            for (i = 0 ; i <FIFO_SIZE ; i = i+1) fifo[i] <= 1'b0;
         end
         
         else begin
             if (wr_en == 1'b1) begin
-                if(full == 1'b1) overflow = 1'b1;
+                if(full == 1'b1) overflow <= 1'b1;
                 else begin
-                    fifo [wr_p] = wdata ;
+                    fifo [wr_p] <= wdata ;
                     if (wr_p == FIFO_SIZE -1) begin
-                        wr_p = 1'b0;
-                        wr_toggle = ~wr_toggle ;
+                        wr_p <= 1'b0;
+                        wr_toggle <= ~wr_toggle ;
                     end
-                    else wr_p = wr_p + 1'b1;
+                    else wr_p <= wr_p + 1'b1;
                 end
             end
             else if (rd_en == 1'b1) begin
@@ -69,10 +69,10 @@ module synchronus_fifo(clk,reset, wr_en,rd_en,wdata,rdata ,full, overflow, empty
                 else begin
                     rdata = fifo[rd_p];
                     if (rd_p == FIFO_SIZE-1) begin
-                        rd_p = 1'b0;
-                        rd_toggle = ~rd_toggle ;
+                        rd_p <= 1'b0;
+                        rd_toggle <= ~rd_toggle ;
                     end
-                    else rd_p = rd_p + 1'b1;
+                    else rd_p <= rd_p + 1'b1;
                 end
             end
         end
@@ -81,7 +81,7 @@ module synchronus_fifo(clk,reset, wr_en,rd_en,wdata,rdata ,full, overflow, empty
     always @(*) begin
          if ((wr_p ==rd_p)&&(wr_toggle != rd_toggle)) full = 1'b1;
          else full = 1'b0;
-         if ((wr_p ==rd_p)&&(wr_toggle != rd_toggle)) empty = 1'b1;
+         if ((wr_p ==rd_p)&&(wr_toggle == rd_toggle)) empty = 1'b1;
          else empty = 1'b0 ;
     end
 endmodule
